@@ -1,19 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
+
+const imagesDataList = [];
+for (let index=0; index < 10; index++) {
+  imagesDataList.push({
+    uri: `https://picsum.photos/1000/1000?random=${index}`,
+    key: `index-${index}`
+  });
+}
 
 export default function App() {
 
-  const imagesDataList = [];
-  for (let index=0; index < 10; index++) {
-    imagesDataList.push({ 'uri': `https://picsum.photos/200/300?random=${index}`, key: `index-${index}` })
-  }
+  const [selectedImageURI, setSelectedImageURI ]= useState('');
 
-  const onImagePress = () => alert("You pressed an Image");
+  const onImagePress = uri => setSelectedImageURI(uri);
 
   const ClickableImage = ({ height, width, onPress, uri }) => (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={() => onPress(uri)}
       style={{ height, width }}
     >
       <Image 
@@ -24,6 +28,15 @@ export default function App() {
       />
     </TouchableOpacity>
   );
+
+  if (Boolean(selectedImageURI)) {
+    return (<ClickableImage
+      width={'100%'}
+      height={'100%'}
+      onPress={() => setSelectedImageURI('')}
+      uri={selectedImageURI} 
+    />);
+  }
 
   return (
     <FlatList
