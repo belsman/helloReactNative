@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Dimensions, Animated, StyleSheet, TouchableOpacity, Image, FlatList, View } from 'react-native';
 
 const imagesDataList = [];
 for (let index=0; index < 10; index++) {
@@ -29,6 +29,39 @@ export default function App() {
     </TouchableOpacity>
   );
 
+  const ImageModal = ({ height, width, onPress, uri }) => {
+
+    console.log("This is the image modal");
+    const slideAnim = useRef(new Animated.Value(Dimensions.get('window').height)).current;
+
+    useEffect(() => {
+      Animated.timing(
+        slideAnim,
+        {
+          toValue: 0,
+          duration: 1000,
+        }
+      ).start();
+    }, [slideAnim]);
+
+    return (
+      <TouchableOpacity
+        onPress={() => onPress(uri)}
+        style={{ height, width }}
+      >
+        <Animated.Image
+          style={
+            [styles.image,
+            {
+              transform: [{ translateY: slideAnim }],
+              zIndex: 1
+            }
+            ]}
+          source={{ uri }} />
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <View>
       <FlatList
@@ -39,7 +72,7 @@ export default function App() {
       />
       { 
         Boolean(selectedImageURI) &&
-        <ClickableImage
+        <ImageModal
           width={'100%'}
           height={'100%'}
           onPress={() => setSelectedImageURI('')}
