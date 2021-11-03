@@ -11,7 +11,7 @@ for (let index=0; index < 10; index++) {
 
 export default function App() {
 
-  const [selectedImageURI, setSelectedImageURI ]= useState('');
+  const [ selectedImageURI, setSelectedImageURI ] = useState('');
 
   const onImagePress = uri => setSelectedImageURI(uri);
 
@@ -40,6 +40,7 @@ export default function App() {
         {
           toValue: 0,
           duration: 1000,
+          useNativeDriver: true,
         }
       ).start();
     }, [slideAnim]);
@@ -47,14 +48,13 @@ export default function App() {
     return (
       <TouchableOpacity
         onPress={() => onPress(uri)}
-        style={{ height, width }}
+        style={{ height, width, zIndex: 1 }}
       >
         <Animated.Image
           style={
             [styles.image,
             {
-              transform: [{ translateY: slideAnim }],
-              zIndex: 1
+              transform: [{ translateY: slideAnim }]
             }
             ]}
           source={{ uri }} />
@@ -63,7 +63,7 @@ export default function App() {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
         data={imagesDataList}
         renderItem={({ item, index, separators }) => (
