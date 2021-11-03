@@ -29,22 +29,24 @@ export default function App() {
     </TouchableOpacity>
   );
 
-  if (Boolean(selectedImageURI)) {
-    return (<ClickableImage
-      width={'100%'}
-      height={'100%'}
-      onPress={() => setSelectedImageURI('')}
-      uri={selectedImageURI} 
-    />);
-  }
-
   return (
-    <FlatList
-      data={imagesDataList}
-      renderItem={({ item, index, separators }) => (
-        <ClickableImage width={'100%'} height={200} onPress={onImagePress} uri={item.uri} />
-      )}
-    />
+    <View>
+      <FlatList
+        data={imagesDataList}
+        renderItem={({ item, index, separators }) => (
+          <ClickableImage width={'100%'} height={200} onPress={onImagePress} uri={item.uri} />
+        )}
+      />
+      { 
+        Boolean(selectedImageURI) &&
+        <ClickableImage
+          width={'100%'}
+          height={'100%'}
+          onPress={() => setSelectedImageURI('')}
+          uri={selectedImageURI} 
+        />
+      }
+    </View>
   )
 }
 
